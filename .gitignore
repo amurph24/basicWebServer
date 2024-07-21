@@ -1,0 +1,5 @@
+#linker files
+*.o
+
+#random executables
+main.exe
