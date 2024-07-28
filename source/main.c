@@ -6,4 +6,5 @@ int main(int argc, char *argv[]) {
 		printf("%d\n", timeout);
 		timeout--;
 	}
+	printf("----\n%s with %d args timed out after %d seconds", argv[0], argc, timeout);
 }

@@ -1,5 +1,8 @@
-#linker files
+# anything in the build dir
+build/*
+
+# linker files
 *.o
 
-#random executables
-main.exe
+# random executables
+*.exe
