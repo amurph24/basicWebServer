@@ -1,6 +1,10 @@
 # anything in the build dir
 build/*
 
+# certain files in the test dir
+test/*.html
+test/*.html.*
+
 # linker files
 *.o
 
