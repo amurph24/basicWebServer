@@ -6,9 +6,24 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <errno.h>
+#include <pthread.h>
 
 #define BUFFER_SIZE 256
 #define SIN_ZERO {0,0,0,0,0,0,0,0}
+
+// pthread only, this needs to free arg
+void *handle_client(void *arg) {
+	int client_fd = *((int *)arg);
+	char *buffer = (char *)malloc(BUFFER_SIZE*sizeof(char));
+
+	ssize_t bytes_received = recv(client_fd, buffer, BUFFER_SIZE, 0);
+	if (bytes_received > 0) {
+
+	}
+	free(buffer);
+	close(client_fd);
+	free(arg);
+}
 
 void open_server() {
 
@@ -38,7 +53,23 @@ void open_server() {
 
 	// handle requests
 	while(1) {
+		// client info
+		struct sockaddr_in client_addr;
+		socklen_t client_addr_len = sizeof(client_addr);
+		int *client_fd = malloc(sizeof(int));
 
+		// accept client connection
+		if ((*client_fd = accept(server_fd,
+      					(struct sockaddr *)&client_addr,
+      					&client_addr_length)) < 0) {
+			printf("no connection to client");
+			continue;
+		}
+
+		// create a thread to handle client request
+		pthread_t thread_id;
+		pthread_create(&thread_id, NULL, handle_client, (void *client_fd));
+		pthread_detach(thread_id);
 	}
 
 	close(server_fd);
