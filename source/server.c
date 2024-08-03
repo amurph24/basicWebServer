@@ -13,8 +13,8 @@
 void open_server() {
 	int	request_count = 0;
 
-	int s = socket(AF_INET, SOCK_STREAM, 0);
-	if (s == -1) {
+	int server_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (server_fd == -1) {
 		printf("could not create socket, errno: %d\n", errno);
 		return;
 	}
@@ -26,7 +26,7 @@ void open_server() {
 		ip_addr,
 		SIN_ZERO
 	};
-	if (bind(s,
+	if (bind(server_fd,
 		(struct sockaddr *) &server_addr,
 		sizeof(server_addr)) < 0) {
 		printf("could not bind socket to server address, errno: %d", errno);
@@ -46,11 +46,11 @@ void open_server() {
 		//clean buffer before every request;
 		memset(buffer, 0, BUFFER_SIZE*sizeof(char));
 
-		if (listen(s, 10) < 0) {
+		if (listen(server_fd, 10) < 0) {
 			printf("server failed to listen on bound socket, errno: %d", errno);
 		}
 
-		client_fd = accept(s, 0, 0);
+		client_fd = accept(server_fd, 0, 0);
 		printf("request #%d accepted on socket\n", request_count);
 
 		///////////////////////////////////////
@@ -68,5 +68,5 @@ void open_server() {
 		close(client_fd);
 	} while(1);
 
-	close(s);
+	close(server_fd);
 }
