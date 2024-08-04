@@ -1,3 +1,6 @@
+# ip info
+include/host_data.h
+
 # anything in the build dir
 build/*
 

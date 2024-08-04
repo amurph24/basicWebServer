@@ -15,8 +15,12 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define PORT 8080
+#include "host_data.h"
+
 #define BUFFER_SIZE 104857600
+// I have these Macros in host_data.h, but you can also define them here
+//#define PORT 8080
+//#define SERVER_IP "127.0.0.1"
 
 const char *get_file_extension(const char *file_name) {
     const char *dot = strrchr(file_name, '.');
@@ -172,7 +176,7 @@ void *handle_client(void *arg) {
             free(file_name);
         }
         regfree(&regex);
-    }
+    } 
     close(client_fd);
     free(arg);
     free(buffer);
@@ -191,7 +195,8 @@ void open_server() {
 
     // config socket
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
+    inet_aton(SERVER_IP, &(server_addr.sin_addr));
+    //server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(PORT);
 
     // bind socket to port
